@@ -59,7 +59,7 @@ set nowrap
 set display=lastline
 
 " 貼り付けるときの set paste, set paste! を <F5>でやる
-set pastetoggle=<F5>
+"set pastetoggle=<F3>
 
 " --------------------------------------------------------------------------------------------------
 " インデント関連
@@ -86,19 +86,19 @@ set textwidth=0
 " --------------------------------------------------------------------------------------------------
 " Windows上で動作するVim関連
 " --------------------------------------------------------------------------------------------------
-if has("win32")
-  " windowsライクなキーマップとか
-  source $VIMRUNTIME/mswin.vim
-
-  " Windowsでディレクトリパスの区切り文字に / が使えるようになる
-  set shellslash
-
-  " クリップボードをWindowsと連携
-  set clipboard=unnamed
-
-  " KaoriyaさんのVimを使っていたら、デフォルト設定を上書き
-  autocmd FileType * setlocal textwidth=0
-endif
+"if has("win32")
+"  " windowsライクなキーマップとか
+"  source $VIMRUNTIME/mswin.vim
+"
+"  " Windowsでディレクトリパスの区切り文字に / が使えるようになる
+"  set shellslash
+"
+"  " クリップボードをWindowsと連携
+"  set clipboard=unnamed
+"
+"  " KaoriyaさんのVimを使っていたら、デフォルト設定を上書き
+"  autocmd FileType * setlocal textwidth=0
+"endif
 
 " --------------------------------------------------------------------------------------------------
 " バックアップ、UNDO、スワップファイル関連
@@ -164,6 +164,10 @@ if v:hlsearch == 1
 endif
 " ESCを2回叩くとON、OFFトグル
 nnoremap <ESC><ESC> :set hlsearch!<CR>
+
+" terminalでもTrue Color(24bit)を使う
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 " --------------------------------------------------------------------------------------------------
 " ステータスライン
@@ -324,8 +328,18 @@ endif
 " Leaderを設定
 let mapleader="\<Space>"
 
+" すべて選択
+"inoremap <C-a> <NOP>
+"inoremap <C-a> <ESC>ggVG
+"nnoremap <C-a> ggVG
+"vnoremap <C-a> ggVG
+
 " .vimrcの再読み込み
 nnoremap <Leader><Leader>sv :source ~/.vimrc<CR>
+
+" タブ移動
+noremap <Leader>h tp
+noremap <Leader>l tn
 
 " 横スクロール
 " 左へ
@@ -338,10 +352,10 @@ noremap + <C-a>
 noremap - <C-x>
 
 " 貼り付けたテキストを選択する
-noremap gV `[v`]l
+"noremap gV `[v`]l
 
 " 英語キーボードだと : はshiftが必要なのでめんどい。 ; にする
-nnoremap ; :
+"nnoremap ; :
 
 " 強制終了。このほうが打ちやすい
 nnoremap <Leader>qq :q!<CR>
@@ -356,17 +370,17 @@ nnoremap <Leader>qq :q!<CR>
 " ファイルタイプの自動検出、ファイルタイプ用のプラグインとインデント設定を自動読み込み
 filetype plugin indent on
 
-if has("win32")
-  " プラグインのパスを指定(unix風に)
-  set runtimepath+=~/.vim,~/.vim/after
-end
+"if has("win32")
+"  " プラグインのパスを指定(unix風に)
+"  set runtimepath+=~/.vim,~/.vim/after
+"end
 
 " プラグインのインストール
 call plug#begin(expand('~/.vim/plugged'))
 " NERDTreeファイラー
-Plug 'scrooloose/nerdtree'
+"Plug 'scrooloose/nerdtree'
 " いろいろなカラースキームをまとめたもの
-Plug 'flazz/vim-colorschemes'
+"Plug 'flazz/vim-colorschemes'
 " 入力補完
 Plug 'Shougo/neocomplcache'
 " スニペット
@@ -375,18 +389,22 @@ Plug 'Shougo/neocomplcache'
 "Plug 'Shougo/neosnippet-snippets'
 
 " colorscheme
-Plug 'fcevado/molokai_dark', { 'do': 'cp -p colors/* ~/.vim/colors/' }
+"Plug 'fcevado/molokai_dark', { 'do': 'cp -p colors/* ~/.vim/colors/' }
+Plug 'raphamorim/lucario', { 'do': 'cp -p colors/* ~/.vim/colors/' }
 
 " vim-airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 "Plug 'https://github.com/powerline/fonts.git', { 'as': 'powerline-fonts', 'do': 'powershell -File install.ps1 \"Roboto Mono*\"' }
 
+" NrrwRgn
+Plug 'chrisbra/NrrwRgn'
+
 call plug#end()
 
 " プラグイン個別の設定
-call s:SourceIfExist('~/.vim/plugin_config/nerdtree.vim')
-call s:SourceIfExist('~/.vim/plugin_config/neocomplcache.vim')
+"call s:SourceIfExist('~/.vim/plugin_config/nerdtree.vim')
+"call s:SourceIfExist('~/.vim/plugin_config/neocomplcache.vim')
 "call s:SourceIfExist('~/.vim/plugin_config/neosnipet.vim')
 call s:SourceIfExist('~/.vim/plugin_config/vim-airline.vim')
 
